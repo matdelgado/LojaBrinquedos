@@ -1,0 +1,10 @@
+br\com\fiap\lojaBrinquedos\LojaBrinquedosApplication.class
+br\com\fiap\lojaBrinquedos\ServletInitializer.class
+br\com\fiap\lojaBrinquedos\Models\Brinquedo.class
+br\com\fiap\lojaBrinquedos\Repository\BrinquedoRepository.class
+br\com\fiap\lojaBrinquedos\Controller\BrinquedoController.class
+br\com\fiap\lojaBrinquedos\DTO\BrinquedoDTO.class
+br\com\fiap\lojaBrinquedos\Service\BrinquedoService.class
+br\com\fiap\lojaBrinquedos\Controller\ErroController.class
+br\com\fiap\lojaBrinquedos\Factory\BrinquedoFactory.class
+br\com\fiap\lojaBrinquedos\Controller\InicioController.class
