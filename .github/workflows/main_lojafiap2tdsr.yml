@@ -60,5 +60,5 @@ jobs:
         with:
           app-name: 'lojafiap2tdsr'
           slot-name: 'Production'
-          package: '*.jar'
+          package: 'java-app/*.jar'
           
