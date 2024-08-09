@@ -1,3 +1,11 @@
+<h1>Integrantes</h1>
+<p>Denner de Oliveira Duarte - RM551938</p>
+<p>Lucas Petroni - RM 97861</p>
+<p>Matheus Paulo de Lima Delgado - RM552189</p>
+<p>Nathaly Oliveira - RM552538</p>
+<p>Caio Boris Andrulis - RM552496</p>
+
+
 <h1>Link do versionamento em nuvem</h1>
 <p>https://lojafiap2tdsr.azurewebsites.net/</p>
 
