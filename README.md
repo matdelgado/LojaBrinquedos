@@ -1,3 +1,6 @@
+<h1>Link do versionamento em nuvem</h1>
+<p>https://lojafiap2tdsr.azurewebsites.net/</p>
+
 
 <h1>Sistema de Gerenciamento de Loja de Brinquedos</h1>
 
