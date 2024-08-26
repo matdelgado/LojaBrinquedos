@@ -12,7 +12,7 @@
 	<groupId>br.com.fiap</groupId>
 	<artifactId>lojaBrinquedos</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 	<name>lojaBrinquedos</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
@@ -89,6 +89,10 @@
 						</exclude>
 					</excludes>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>
