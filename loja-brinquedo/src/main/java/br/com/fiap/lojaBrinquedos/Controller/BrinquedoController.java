@@ -1,97 +1,76 @@
 package br.com.fiap.lojaBrinquedos.Controller;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fiap.lojaBrinquedos.DTO.BrinquedoDTO;
 import br.com.fiap.lojaBrinquedos.Service.BrinquedoService;
 
-
-@RestController
+@Controller
 @RequestMapping("/brinquedos")
 public class BrinquedoController {
 
     @Autowired
     private BrinquedoService brinquedoService;
-    
+
     @GetMapping
-    public ResponseEntity<List<EntityModel<BrinquedoDTO>>> getAll() {
+    public String getAll(Model model) {
         List<BrinquedoDTO> brinquedos = brinquedoService.getAll();
-        List<EntityModel<BrinquedoDTO>> brinquedoModels = brinquedos.stream()
-                .map(BrinquedoDTO::toModel)
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(brinquedoModels);
+        model.addAttribute("brinquedos", brinquedos);
+        return "brinquedos";
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<EntityModel<BrinquedoDTO>> getById(@PathVariable Long id){
-        BrinquedoDTO brinquedoExistente = brinquedoService.getById(id);
-        if (brinquedoExistente != null) {
-            return ResponseEntity.ok(BrinquedoDTO.toModel(brinquedoExistente));
+    @GetMapping("/descricao/{id}")
+    public String getById(@PathVariable Long id, Model model) {
+        BrinquedoDTO brinquedo = brinquedoService.getById(id);
+        if (brinquedo != null) {
+            model.addAttribute("brinquedo", brinquedo);
+            return "descricao";
         } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @PostMapping()
-    public ResponseEntity<?> criarBrinquedo(@RequestBody BrinquedoDTO brinquedo){
-        BrinquedoDTO novoBrinquedo = brinquedoService.criarBrinquedo(brinquedo);
-        if( novoBrinquedo != null){
-            return ResponseEntity.status(HttpStatus.CREATED).body(BrinquedoDTO.toModel(novoBrinquedo));
-        } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Não foi possível realizar a operação");
-        }
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletarBrinquedo(@PathVariable Long id){
-        boolean brinquedoDeletado = brinquedoService.deleteBrinquedo(id);
-        if(brinquedoDeletado) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Foi realizado a exclusão do brinquedo");
+            return "redirect:/brinquedos";
         }
     }
     
-    @PutMapping("/{id}")
-    public ResponseEntity<EntityModel<BrinquedoDTO>> atualizarBrinquedo(@PathVariable Long id, @RequestBody BrinquedoDTO brinquedo){
-        BrinquedoDTO brinquedoAtualiazado = brinquedoService.updateBrinquedo(id, brinquedo);
+    @GetMapping("/adicionar")
+    public String adicionar(Model model) {
+        model.addAttribute("brinquedo", new BrinquedoDTO());
+        return "editar";
+    }
 
-        if(brinquedoAtualiazado != null){
-            return ResponseEntity.ok(BrinquedoDTO.toModel(brinquedoAtualiazado));
+    @GetMapping("/editar/{id}")
+    public String editar(@PathVariable Long id, Model model) {
+        BrinquedoDTO brinquedo = brinquedoService.getById(id);
+        if (brinquedo != null) {
+            model.addAttribute("brinquedo", brinquedo);
+            return "editar";
         } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-    
-    @PatchMapping("/{id}")
-    public ResponseEntity<EntityModel<BrinquedoDTO>> atualizarParcialBrinquedo(@PathVariable Long id, @RequestBody BrinquedoDTO brinquedo) {
-        try {
-            BrinquedoDTO brinquedoAtualizado = brinquedoService.updatePartialBrinquedo(id, brinquedo);
-
-            if (brinquedoAtualizado != null) {
-                return ResponseEntity.ok(BrinquedoDTO.toModel(brinquedoAtualizado));
-            } else {
-                return ResponseEntity.notFound().build();
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return "redirect:/brinquedos";
         }
     }
 
+    @PostMapping("/adicionar")
+    public String adicionarBrinquedo(@ModelAttribute BrinquedoDTO brinquedo) {
+        brinquedoService.criarBrinquedo(brinquedo);
+        return "redirect:/brinquedos";
+    }
+
+    @PostMapping("/editar/{id}")
+    public String atualizarBrinquedo(@PathVariable Long id, @ModelAttribute BrinquedoDTO brinquedo) {
+        brinquedoService.updateBrinquedo(id, brinquedo);
+        return "redirect:/brinquedos";
+    }
+
+    @PostMapping("/excluir/{id}")
+    public String excluirBrinquedo(@PathVariable Long id) {
+        brinquedoService.deleteBrinquedo(id);
+        return "redirect:/brinquedos";
+    }
 }

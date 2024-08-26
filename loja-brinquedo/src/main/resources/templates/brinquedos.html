@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>Lista de Brinquedos</title>
+</head>
+<body>
+<div class="container">
+    <h1>Lista de Brinquedos</h1>
+
+    <ul>
+        <th:block th:each="brinquedo : ${brinquedos}">
+            <li>
+                <span th:text="${brinquedo.nome}"></span>
+                <div>
+                    <a th:href="@{/brinquedos/descricao/{id}(id=${brinquedo.id})}" class="button">Descrição</a>
+                    <a th:href="@{/brinquedos/editar/{id}(id=${brinquedo.id})}" class="button">Editar</a>
+
+                    <form th:action="@{/brinquedos/excluir/{id}(id=${brinquedo.id})}" method="post" style="display:inline;">
+                        <button type="submit" class="button" onclick="return confirm('Tem certeza que deseja excluir este brinquedo?');">Excluir</button>
+                    </form>
+                </div>
+            </li>
+        </th:block>
+    </ul>
+
+    <a href="/brinquedos/adicionar" class="button">Adicionar Brinquedo</a>
+</div>
+</body>
+</html>
