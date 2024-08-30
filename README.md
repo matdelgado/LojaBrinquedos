@@ -32,7 +32,6 @@
 
 <h2>Uso</h2>
 <ol>
-    <li>Utilize o site em nuvem para cadastrar, editar, visualizar e excluir brinquedos.</li>
     <li>URLs:</li>
     <ul>
         <li>/brinquedos: Exibe informações sobre todos os brinquedos.</li>
