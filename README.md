@@ -30,8 +30,6 @@
     <li>Lombok</li>
 </ul>
 
-<h2>Começando</h2>
-
 <h2>Uso</h2>
 <ol>
     <li>Utilize o site em nuvem para cadastrar, editar, visualizar e excluir brinquedos.</li>
