@@ -7,9 +7,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class InicioController {
 
-    @GetMapping
-    public String inicio(){
-        return "Bem vindo a nossa API de controle para uma loja de brinquedos";
+    @GetMapping("/")
+    public String inicio(Model model){
+    	model.addAttribute("message", "Bem vindo a nossa API de controle para uma loja de brinquedos");
+        return "home";
     }
     
     @GetMapping("/home")
