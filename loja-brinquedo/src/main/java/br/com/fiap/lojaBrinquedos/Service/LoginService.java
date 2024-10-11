@@ -22,8 +22,8 @@ public class LoginService {
     @Autowired
     private LoginFactory factory;
 
-    private PublicKey publicKey;  // Defina sua chave pública
-    private PrivateKey privateKey; // Defina sua chave privada
+    private PublicKey publicKey;
+    private PrivateKey privateKey;
 
     public List<LoginDTO> getAll() {
         return factory.toDto((List<Login>) loginRepository.findAll());

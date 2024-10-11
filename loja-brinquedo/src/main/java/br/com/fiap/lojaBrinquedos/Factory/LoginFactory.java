@@ -20,7 +20,7 @@ public class LoginFactory {
         LoginDTO dto = new LoginDTO();
 
         dto.setId(login.getId());
-        dto.setUser(login.getUser());
+        dto.setUsername(login.getUsername());
         dto.setSenha(login.getSenha());
         return dto;
     }
@@ -35,7 +35,7 @@ public class LoginFactory {
 
         Login entity = new Login();
         entity.setId(login.getId());
-        entity.setUser(login.getUser());
+        entity.setUsername(login.getUsername());
         entity.setSenha(login.getSenha());
         return entity;
     }

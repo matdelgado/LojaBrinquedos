@@ -20,9 +20,9 @@ public class Login {
     @Column(name="id")
     public Long id;
 
-    @Column(name = "user")
+    @Column(name = "username")
     @Size(min = 10, max = 200, message = "O usuario precisa ter entre 10 e 200 caracteres")
-    public String user;
+    public String username;
 
     @Column(name="senha")
     @Size(min = 5, max = 20, message = "A senha precisa ter entre 5 e 20 caracteres")

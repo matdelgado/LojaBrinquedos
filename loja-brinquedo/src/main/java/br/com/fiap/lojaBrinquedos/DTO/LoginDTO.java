@@ -16,7 +16,7 @@ import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 public class LoginDTO {
 
     public Long id;
-    public String user;
+    public String username;
     public String senha;
 
     public static EntityModel<LoginDTO> toModel(LoginDTO login) {
