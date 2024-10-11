@@ -44,5 +44,4 @@ public class LoginDTO {
 
         return EntityModel.of(login, selfLink, getAllLink, getByIdLink, createLink, updateLink, deleteLink);
     }
-
 }

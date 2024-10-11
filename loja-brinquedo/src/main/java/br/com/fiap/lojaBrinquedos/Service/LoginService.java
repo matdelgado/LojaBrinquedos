@@ -4,12 +4,10 @@ import br.com.fiap.lojaBrinquedos.DTO.LoginDTO;
 import br.com.fiap.lojaBrinquedos.Factory.LoginFactory;
 import br.com.fiap.lojaBrinquedos.Models.Login;
 import br.com.fiap.lojaBrinquedos.Repository.LoginRepository;
-import br.com.fiap.lojaBrinquedos.Security.RSAUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.security.PrivateKey;
-import java.security.PublicKey;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,8 +20,8 @@ public class LoginService {
     @Autowired
     private LoginFactory factory;
 
-    private PublicKey publicKey;
-    private PrivateKey privateKey;
+    @Autowired
+    private PasswordEncoder passwordEncoder; // Injetado para criptografar senhas
 
     public List<LoginDTO> getAll() {
         return factory.toDto((List<Login>) loginRepository.findAll());
@@ -35,7 +33,7 @@ public class LoginService {
     }
 
     public LoginDTO criarLogin(LoginDTO login) throws Exception {
-        String encryptedPassword = RSAUtil.encrypt(login.getSenha(), publicKey);
+        String encryptedPassword = passwordEncoder.encode(login.getSenha());
         login.setSenha(encryptedPassword);
         Login novoLogin = loginRepository.save(factory.toEntity(login));
         return factory.toDto(novoLogin);
@@ -46,7 +44,7 @@ public class LoginService {
 
         if (loginExistente != null) {
             if (login.getSenha() != null) {
-                String encryptedPassword = RSAUtil.encrypt(login.getSenha(), publicKey);
+                String encryptedPassword = passwordEncoder.encode(login.getSenha());
                 login.setSenha(encryptedPassword);
             }
             Login desatualizado = factory.toEntity(login);

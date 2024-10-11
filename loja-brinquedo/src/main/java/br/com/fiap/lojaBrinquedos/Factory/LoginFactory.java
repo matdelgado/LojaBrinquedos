@@ -1,6 +1,5 @@
 package br.com.fiap.lojaBrinquedos.Factory;
 
-
 import br.com.fiap.lojaBrinquedos.DTO.LoginDTO;
 import br.com.fiap.lojaBrinquedos.Models.Login;
 import org.springframework.stereotype.Component;
@@ -12,13 +11,12 @@ import java.util.stream.Collectors;
 
 @Component
 public class LoginFactory {
-    public List<LoginDTO> toDto(List<Login> logins){
+    public List<LoginDTO> toDto(List<Login> logins) {
         return Optional.ofNullable(logins).map(lista -> lista.stream().map(this::toDto).collect(Collectors.toList())).orElse(Collections.emptyList());
     }
 
-    public LoginDTO toDto(Login login){
+    public LoginDTO toDto(Login login) {
         LoginDTO dto = new LoginDTO();
-
         dto.setId(login.getId());
         dto.setUsername(login.getUsername());
         dto.setSenha(login.getSenha());
@@ -31,8 +29,7 @@ public class LoginFactory {
                 .orElse(Collections.emptyList());
     }
 
-    public Login toEntity(LoginDTO login){
-
+    public Login toEntity(LoginDTO login) {
         Login entity = new Login();
         entity.setId(login.getId());
         entity.setUsername(login.getUsername());

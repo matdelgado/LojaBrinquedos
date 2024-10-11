@@ -28,19 +28,7 @@ public class LoginController {
     // Processar o login
     @PostMapping
     public String login(@ModelAttribute @Valid LoginDTO loginDTO, Model model) {
-        // Verifica se o usuário existe
-        LoginDTO existingUser = loginService.getAll().stream()
-                .filter(user -> user.getUsername().equals(loginDTO.getUsername())
-                        && user.getSenha().equals(loginDTO.getSenha()))
-                .findFirst()
-                .orElse(null);
-
-        if (existingUser != null) {
-            return "redirect:/brinquedos/adicionar";
-        } else {
-            model.addAttribute("error", "Usuário ou senha inválidos. Deseja se cadastrar?");
-            return "login";
-        }
+        return "redirect:/brinquedos";
     }
 
     // Exibir a página de cadastro
@@ -50,13 +38,12 @@ public class LoginController {
         return "cadastro";  // Retorna o template cadastro.html
     }
 
-
     // Processar o cadastro
     @PostMapping("/cadastrar")
     public String cadastrar(@ModelAttribute @Valid LoginDTO loginDTO, Model model) {
         try {
             loginService.criarLogin(loginDTO);
-            return "redirect:/login";
+            return "redirect:/login"; // Redireciona para a página de login após cadastro
         } catch (Exception e) {
             model.addAttribute("error", "Erro ao cadastrar usuário: " + e.getMessage());
             return "cadastro";
