@@ -5,6 +5,10 @@ import br.com.fiap.lojaBrinquedos.Factory.LoginFactory;
 import br.com.fiap.lojaBrinquedos.Models.Login;
 import br.com.fiap.lojaBrinquedos.Repository.LoginRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -12,16 +16,32 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class LoginService {
+public class LoginService implements UserDetailsService {
+
+    private final LoginRepository loginRepository;
+    private final LoginFactory factory;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    private LoginRepository loginRepository;
+    public LoginService(LoginRepository loginRepository, LoginFactory factory, PasswordEncoder passwordEncoder) {
+        this.loginRepository = loginRepository;
+        this.factory = factory;
+        this.passwordEncoder = passwordEncoder;
+    }
 
-    @Autowired
-    private LoginFactory factory;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder; // Injetado para criptografar senhas
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<Login> user = loginRepository.findByUsername(username);
+        if (user.isPresent()) {
+            var usernameObj = user.get();
+            return User.builder()
+                    .username(usernameObj.getUsername())
+                    .password(usernameObj.getSenha())
+                    .build();
+        } else {
+            throw new UsernameNotFoundException(username);
+        }
+    }
 
     public List<LoginDTO> getAll() {
         return factory.toDto((List<Login>) loginRepository.findAll());

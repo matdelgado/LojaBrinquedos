@@ -1,9 +1,10 @@
 package br.com.fiap.lojaBrinquedos.Repository;
 
 import br.com.fiap.lojaBrinquedos.Models.Login;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-@Repository
-public interface LoginRepository extends CrudRepository<Login, Long> {
+import java.util.Optional;
+
+public interface LoginRepository extends JpaRepository<Login, Long> {
+    Optional<Login> findByUsername(String username);
 }

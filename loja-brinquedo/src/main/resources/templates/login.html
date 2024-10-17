@@ -9,7 +9,7 @@
 <body>
 <div class="container">
   <h1>Login</h1>
-  <form th:action="@{/login}" th:object="${login}" method="post">
+  <form th:action="@{/req/login}" th:object="${login}" method="post">
     <div class="form-group">
       <label for="username">Usuário:</label>
       <input type="text" id="username" th:field="*{username}" required placeholder="Digite seu usuário">
@@ -22,9 +22,13 @@
       <button type="submit" class="button">Login</button>
     </div>
     <div class="form-group">
-      <a href="/login/cadastrar" class="button">Cadastrar</a>  <!-- Link para cadastro -->
+      <a href="/req/signup" class="button">Cadastrar</a>
+    </div>
+    <div class="form-group">
+      <a href="/home" class="button">Voltar a página Home</a>
     </div>
   </form>
+
 
   <div th:if="${error}" style="color: red;">
     <p th:text="${error}"></p>

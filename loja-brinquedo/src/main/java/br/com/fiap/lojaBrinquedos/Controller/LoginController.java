@@ -1,52 +1,69 @@
 package br.com.fiap.lojaBrinquedos.Controller;
 
 import br.com.fiap.lojaBrinquedos.DTO.LoginDTO;
-import br.com.fiap.lojaBrinquedos.Service.LoginService;
+import br.com.fiap.lojaBrinquedos.Factory.LoginFactory;
+import br.com.fiap.lojaBrinquedos.Models.Login;
+import br.com.fiap.lojaBrinquedos.Repository.LoginRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.net.URI;
+import java.util.Optional;
 
 @Controller
-@RequestMapping("/login")
 public class LoginController {
 
     @Autowired
-    private LoginService loginService;
+    private LoginRepository loginRepository;
 
-    // Exibir a página de login
-    @GetMapping
-    public String showLoginPage(Model model) {
-        if (!model.containsAttribute("login")) {
-            model.addAttribute("login", new LoginDTO());
+    @Autowired
+    private LoginFactory factory;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @PostMapping(value = "/req/signup", consumes = "application/json")
+    public ResponseEntity<EntityModel<LoginDTO>> createUser(@RequestBody LoginDTO loginDTO) {
+        Optional<Login> existingUser = loginRepository.findByUsername(loginDTO.getUsername());
+        if (existingUser.isPresent()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build(); // Retorna 409 se o usuário já existir
         }
-        return "login";
+
+        loginDTO.setSenha(passwordEncoder.encode(loginDTO.getSenha()));
+
+        Login newUser = loginRepository.save(factory.toEntity(loginDTO));
+
+        return ResponseEntity.ok(LoginDTO.toModel(factory.toDto(newUser)));
     }
 
-    // Processar o login
-    @PostMapping
-    public String login(@ModelAttribute @Valid LoginDTO loginDTO, Model model) {
-        return "redirect:/brinquedos";
-    }
+    @PostMapping(value = "/req/login")
+    public ResponseEntity<String> login(@ModelAttribute LoginDTO loginDTO) {
+        Optional<Login> userDB = loginRepository.findByUsername(loginDTO.getUsername());
 
-    // Exibir a página de cadastro
-    @GetMapping("/cadastrar")
-    public String showCadastroPage(Model model) {
-        model.addAttribute("login", new LoginDTO());
-        return "cadastro";  // Retorna o template cadastro.html
-    }
-
-    // Processar o cadastro
-    @PostMapping("/cadastrar")
-    public String cadastrar(@ModelAttribute @Valid LoginDTO loginDTO, Model model) {
-        try {
-            loginService.criarLogin(loginDTO);
-            return "redirect:/login"; // Redireciona para a página de login após cadastro
-        } catch (Exception e) {
-            model.addAttribute("error", "Erro ao cadastrar usuário: " + e.getMessage());
-            return "cadastro";
+        if (userDB.isPresent()) {
+            System.out.println("Usuário encontrado: " + userDB.get().getUsername()); // Debug
+            if (passwordEncoder.matches(loginDTO.getSenha(), userDB.get().getSenha())) {
+                System.out.println("Senha correta"); // Debug
+                return ResponseEntity.status(HttpStatus.FOUND)
+                        .location(URI.create("/brinquedos"))
+                        .build();
+            } else {
+                System.out.println("Senha incorreta"); // Debug
+            }
+        } else {
+            System.out.println("Usuário não encontrado"); // Debug
         }
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body("Erro de autenticação");
     }
+
+
 }
