@@ -1,13 +1,21 @@
 FROM ubuntu:latest AS build
 
+# Instala o OpenJDK 17 e Maven
 RUN apt-get update && apt-get install -y openjdk-17-jdk maven
 
+# Define o diretório de trabalho dentro do container
 WORKDIR /loja-brinquedo
 
-COPY . .
+# Copia o pom.xml primeiro para otimizar a construção do Docker
+COPY pom.xml ./
 
+# Copia o restante dos arquivos do projeto
+COPY src ./src
+
+# Executa o Maven para construir o projeto
 RUN mvn clean install
 
+# Listar o conteúdo do diretório target para verificação
 RUN ls -l target/
 
 # Etapa de execução
