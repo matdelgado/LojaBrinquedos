@@ -7,6 +7,8 @@ COPY loja-brinquedo/ .
 #Corrigin o diretório do pom.xml
 RUN mvn clean install
 
+RUN ls -l target/
+
 FROM openjdk:17-jdk-slim
 
 EXPOSE 8080
