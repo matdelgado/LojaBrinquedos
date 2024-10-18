@@ -4,6 +4,7 @@ RUN apt-get update && apt-get install -y openjdk-17-jdk maven
 
 COPY loja-brinquedo/ .
 
+#Corrigin o diretório do pom.xml
 RUN mvn clean install
 
 FROM openjdk:17-jdk-slim
