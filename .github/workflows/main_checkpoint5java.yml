@@ -50,5 +50,5 @@ jobs:
         with:
           app-name: 'checkpoint5java'
           slot-name: 'Production'
-          package: '*.jar'
+          package: '*.war'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_FA8D9EEE9E734D7BB5E317F5986174C2 }}
